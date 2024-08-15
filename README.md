@@ -1,5 +1,11 @@
 # Curate Alpaca
 
+<div align="center">
+<img src="assets/llama_guarani.png" width="400" height="400" alt="Llama guarani" title="It's a Llama, I know xD">
+</div>
+
+## About
+
 Simple tool to curate alpaca dataset for training LLMs in other language.
 
 In this case we built this tool to curate dataset transalated to Guarani and prepare for finetunning LLMs with this new language.
