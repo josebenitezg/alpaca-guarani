@@ -1,0 +1,7 @@
+*.db
+/legacy
+__pycache__
+*.ipynb
+.env
+logs
+venv

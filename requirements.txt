@@ -1,0 +1,7 @@
+sentencepiece
+torch        
+transformers
+streamlit
+accelerate
+datasets
+plotly
