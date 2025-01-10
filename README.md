@@ -1,3 +1,14 @@
+---
+title: Alpaca-Guarani
+emoji: 🦙 🇵🇾
+colorFrom: green
+colorTo: blue
+sdk: gradio
+sdk_version: 5.11.0
+app_file: main.py
+pinned: false
+---
+
 # Curate Alpaca
 
 <div align="center">
