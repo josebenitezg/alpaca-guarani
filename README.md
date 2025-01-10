@@ -19,6 +19,7 @@ In this case we built this tool to curate dataset transalated to Guarani and pre
 - Multiple translation backends supported:
   - OpenAI GPT-4 (default) for high-quality translations
   - NLLB (Neural Language Learning Benchmark) model for offline/local processing
+  - Google Cloud Translation for reliable machine translation
 
 ### How to use
 1. Clone the repo
@@ -37,6 +38,7 @@ export SUPABASE_URL=your_supabase_url
 export SUPABASE_KEY=your_supabase_key
 export OPENAI_API_KEY=your_openai_api_key
 export TRANSLATION_MODEL=openai
+export GOOGLE_CREDENTIALS_PATH=/path/to/your/credentials.json
 ```
 
 3. Run the app

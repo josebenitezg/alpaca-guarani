@@ -8,3 +8,4 @@ plotly
 openai>=1.0.0
 python-dotenv
 supabase>=0.7.1
+google-cloud-translate>=3.0.0

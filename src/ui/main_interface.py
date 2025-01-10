@@ -1,6 +1,6 @@
 import gradio as gr
 from src.config.logging_config import setup_logging
-from src.core.translation import OpenAITranslationService, NLLBTranslationService
+from src.core.translation import OpenAITranslationService, NLLBTranslationService, GoogleTranslationService
 from src.config.settings import TranslationModel, TRANSLATION_MODEL, TABLE_NAME
 from src.core.database.supabase import get_supabase_client
 from .dashboard import create_dashboard
@@ -12,11 +12,13 @@ def create_ui(state):
     def get_translator():
         if TRANSLATION_MODEL == TranslationModel.OPENAI:
             return OpenAITranslationService()
+        elif TRANSLATION_MODEL == TranslationModel.GOOGLE:
+            return GoogleTranslationService()
         return NLLBTranslationService()
 
     def save_translation(instruction, input_text, output):
         if not state.current_item:
-            return "No current item to save"
+            return "No current item to save", {}, {}, {}, {}, {}, {}
         
         logger.info(f"Saving translation for item {state.current_item['id']}")
         supabase.table(TABLE_NAME).update({
@@ -27,7 +29,9 @@ def create_ui(state):
         }).eq("id", state.current_item['id']).execute()
         
         state.update_progress()
-        return state.get_progress()
+        
+        # Get next item immediately after saving
+        return load_next()
 
     def translate_and_update():
         if not state.current_item:
@@ -114,7 +118,11 @@ def create_ui(state):
         save_btn.click(
             save_translation,
             inputs=[instruction_box, input_box, output_box],
-            outputs=[progress_box]
+            outputs=[
+                progress_box,
+                original_instruction, original_input, original_output,
+                instruction_box, input_box, output_box
+            ]
         )
         
         return app 
