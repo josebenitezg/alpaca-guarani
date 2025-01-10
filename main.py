@@ -1,16 +1,16 @@
-import gradio as gr
-from config import init_all, get_logger
-from database import populate_db_with_dataset
-from state import TranslationState
-from ui import create_ui
+from src.config.logging_config import setup_logging
+from src.core.database.operations import populate_db_with_dataset
+from src.utils.state import TranslationState
+from src.ui.main_interface import create_ui
 
 def main():
-    init_all()  # This now includes setting up logging
-    logger = get_logger()
+    logger = setup_logging()
     logger.info("Starting Alpaca Translator application")
+    
     populate_db_with_dataset()
     state = TranslationState()
     app = create_ui(state)
+    
     logger.info("Launching Gradio interface")
     app.launch()
 

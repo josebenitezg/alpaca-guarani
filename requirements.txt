@@ -7,3 +7,4 @@ datasets
 plotly
 openai>=1.0.0
 python-dotenv
+supabase>=0.7.1
