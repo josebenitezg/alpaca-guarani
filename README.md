@@ -16,6 +16,9 @@ In this case we built this tool to curate dataset transalated to Guarani and pre
 - Supabase for manage the dataset
 - Gradio to build the UI
 - HF Transformers pipeline to translate the dataset
+- Multiple translation backends supported:
+  - OpenAI GPT-4 (default) for high-quality translations
+  - NLLB (Neural Language Learning Benchmark) model for offline/local processing
 
 ### How to use
 1. Clone the repo
@@ -32,6 +35,8 @@ pip install -r requirements.txt
 ```bash
 export SUPABASE_URL=your_supabase_url
 export SUPABASE_KEY=your_supabase_key
+export OPENAI_API_KEY=your_openai_api_key
+export TRANSLATION_MODEL=openai
 ```
 
 3. Run the app

@@ -4,6 +4,7 @@ import logging
 from datetime import datetime
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 from supabase import create_client, Client
+from enum import Enum
 
 # Device Configuration
 DEVICE = 'mps' if torch.backends.mps.is_available() else 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -26,6 +27,18 @@ SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
 LOG_DIR = "logs"
 LOG_LEVEL = logging.INFO
 LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+
+# Model Selection Configuration
+class TranslationModel(Enum):
+    NLLB = "nllb"
+    OPENAI = "openai"
+
+# Change default to OpenAI
+TRANSLATION_MODEL = TranslationModel(os.environ.get("TRANSLATION_MODEL", "openai"))
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+OPENAI_MODEL = "gpt-4o"  # Changed back from "gpt-4o" to "gpt-4"
+OPENAI_SYSTEM_PROMPT = """You are a professional translator specialized in Spanish to Guarani translations. 
+Translate the given text maintaining the original meaning and cultural context."""
 
 # Model and Translator Instances
 model_nllb = None
@@ -67,9 +80,11 @@ def init_translator():
 
 def get_translator():
     global translator
-    if translator is None:
-        init_translator()
-    return translator
+    if TRANSLATION_MODEL == TranslationModel.NLLB:
+        if translator is None:
+            init_translator()
+        return translator
+    return None  # Return None for OpenAI as it doesn't need a translator instance
 
 def init_supabase():
     global supabase
@@ -88,10 +103,15 @@ def get_supabase():
 # Initialize all components
 def init_all():
     setup_logging()
-    init_model()
-    init_translator()
+    if TRANSLATION_MODEL == TranslationModel.OPENAI:
+        if not OPENAI_API_KEY:
+            raise ValueError("OpenAI API key must be set as environment variable")
+        logger.info("OpenAI configuration initialized")
+    else:  # NLLB model
+        init_model()
+        init_translator()
     init_supabase()
-    logger.info("All components initialized")
+    logger.info(f"All components initialized using {TRANSLATION_MODEL.value} model")
 
 # Getter for logger
 def get_logger():
